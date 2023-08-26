@@ -11,7 +11,7 @@ interface UpdateUserParams {
   bio: string;
   image: string;
   path: string;
-}
+};
 
 export async function updateUser({ userId, username, name, bio, image, path }: UpdateUserParams): Promise<void> {
   connectToDB();
@@ -45,3 +45,15 @@ export async function updateUser({ userId, username, name, bio, image, path }: U
     throw new Error(`Failed to create/update user: ${error.message}`);
   }
 };
+
+export async function fetchUser(userId: string) {
+  try {
+    connectToDB();
+
+    return await User
+      .findOne({ id: userId })
+      // .populate({ path: 'communities', model: Community });
+  } catch (error) {
+    throw new Error('Failed to fetch user');
+  }
+}

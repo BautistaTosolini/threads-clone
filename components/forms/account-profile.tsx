@@ -26,7 +26,7 @@ interface AccountProfileProps {
     image: string;
   };
   btnTitle: string;
-}
+};
 
 const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
   const [files, setFiles] = useState<File[]>([]);
@@ -137,6 +137,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   onChange={(e) => handleImageUpload(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -156,6 +157,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -175,6 +177,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -194,6 +197,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
