@@ -3,18 +3,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import Image from 'next/image';
-import { useState, type ChangeEvent } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { ThreadValidation } from '@/lib/validations/thread';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { isBase64Image } from '@/lib/utils';
-import { useUploadThing } from '@/lib/uploadthing';
-import { updateUser } from '@/lib/actions/user.actions';
 import { createThread } from '@/lib/actions/thread.actions';
 
 interface AccountProfileProps {
