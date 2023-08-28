@@ -37,11 +37,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
             {profileTabs.map((tab) => {
               return (
                 <TabsTrigger 
-                  key={tab.label} 
+                  key={`${tab.label}-${tab.value}`} 
                   value={tab.value} 
                   className='tab'
                 >
                   <Image 
+                    key={tab.label}
                     src={tab.icon}
                     alt={tab.label}
                     width={24}

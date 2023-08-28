@@ -1,8 +1,10 @@
 'use server'
 
+import { revalidatePath } from 'next/cache';
+import { FilterQuery, SortOrder } from 'mongoose';
+
 import { connectToDB } from '@/lib/mongoose';
 import User from '@/lib/models/user.model';
-import { revalidatePath } from 'next/cache';
 
 interface UpdateUserParams {
   userId: string;
@@ -13,17 +15,16 @@ interface UpdateUserParams {
   path: string;
 };
 
+interface FetchUsersParams {
+  userId: string;
+  searchString: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: SortOrder;
+};
+
 export async function updateUser({ userId, username, name, bio, image, path }: UpdateUserParams): Promise<void> {
   connectToDB();
-
-  console.log({
-    userId,
-    username,
-    name,
-    bio,
-    image,
-    path
-  })
 
   try {
     await User.findOneAndUpdate({
@@ -56,4 +57,45 @@ export async function fetchUser(userId: string) {
   } catch (error) {
     throw new Error('Failed to fetch user');
   }
-}
+};
+
+export async function fetchUsers({ userId, searchString = '', pageNumber = 1, pageSize = 20, sortBy = 'desc' }: FetchUsersParams) {
+  connectToDB();
+
+  try {
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+    const regex = new RegExp(searchString, 'i');
+
+    const query: FilterQuery<typeof User> = {
+      id: { $ne: userId }
+    }
+
+    if (searchString.trim() !== '') {
+      query.$or = [
+        {
+          username: { $regex: regex },
+          name: { $regex: regex },
+        }
+      ]
+    }
+
+    const sortOptions = { createdAt: sortBy };
+
+    const usersQuery = User
+      .find(query)
+      .sort(sortOptions)
+      .skip(skipAmount)
+      .limit(pageSize);
+
+    const totalUsersCount = await User.countDocuments(query);
+
+    const users = await usersQuery.exec();
+
+    const isNext = totalUsersCount > skipAmount + users.length;
+
+    return { users, isNext };
+  } catch (error: any) {
+    throw new Error(`Error fetching users: ${error.message}`)
+  }
+};

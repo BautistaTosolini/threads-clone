@@ -1,9 +1,10 @@
 'use server'
 
+import { revalidatePath } from 'next/cache';
+
 import { connectToDB } from '@/lib/mongoose';
 import Thread from '@/lib/models/thread.model';
 import User from '@/lib/models/user.model';
-import { revalidatePath } from 'next/cache';
 
 interface CreateThreadParams {
   text: string;
