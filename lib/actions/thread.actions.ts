@@ -72,7 +72,7 @@ export async function fetchThreads({ pageNumber = 1, pageSize = 20 }) {
     const isNext = totalThreadsCount > skipAmount + threads.length;
 
     return { threads, isNext };
-}
+};
 
 export async function fetchThreadById(id: string) {
   connectToDB();
@@ -109,7 +109,7 @@ export async function fetchThreadById(id: string) {
   } catch (error: any) {
     throw new Error(`Error fetching thread: ${error.message}`)
   }
-}
+};
 
 export async function addCommentToThread({ threadId, commentText, userId, path }: AddCommentToThreadParams) {
   connectToDB();
@@ -137,4 +137,29 @@ export async function addCommentToThread({ threadId, commentText, userId, path }
   } catch (error: any) {
     throw new Error(`Error adding comment to thread: ${error.message}`)
   }
-}
+};
+
+export async function fetchUserThreads(id: string) {
+  connectToDB();
+
+  try {
+    const threads = await User.findOne({ id: id })
+      .populate({
+        path: 'threads',
+        model: Thread,
+        populate: {
+          path: 'children',
+          model: Thread,
+          populate: {
+            path: 'author',
+            model: User,
+            select: 'name image id'
+          }
+        }
+      });
+
+    return threads;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user threads: ${error.message}`)
+  }
+};
