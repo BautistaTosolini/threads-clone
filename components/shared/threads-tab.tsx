@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { fetchUserThreads } from "@/lib/actions/thread.actions";
-import ThreadCard from "../cards/thread-card";
+import ThreadCard from "@/components/cards/thread-card";
+import { fetchCommunityThreads } from "@/lib/actions/community.actions";
 
 interface ThreadsTabProps {
   currentUserId: string;
@@ -10,7 +11,13 @@ interface ThreadsTabProps {
 }
 
 const ThreadsTab = async ({ currentUserId, accountId, accountType }: ThreadsTabProps) => {
-  const result = await fetchUserThreads(accountId);
+  let result: any;
+
+  if (accountType === 'Community') {
+    result = await fetchCommunityThreads(accountId);
+  } else {
+    result = await fetchUserThreads(accountId);
+  }
 
   if (!result) {
     redirect('/')

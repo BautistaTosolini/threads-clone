@@ -70,11 +70,11 @@ export async function fetchCommunityDetails(id: string) {
   }
 }
 
-export async function fetchCommunityPosts(id: string) {
+export async function fetchCommunityThreads(id: string) {
   try {
     connectToDB();
 
-    const communityPosts = await Community.findById(id).populate({
+    const communityPosts = await Community.findOne({ id }).populate({
       path: 'threads',
       model: Thread,
       populate: [
