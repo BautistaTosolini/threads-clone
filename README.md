@@ -32,7 +32,7 @@ Threads is an online social media operated by Meta Platforms. This project is pr
 :heavy_check_mark: **Creating a Thread:** A user initiates a discussion or topic by creating a "thread" or a "post." This initial post serves as the main topic of discussion.;\
 :heavy_check_mark: **Responding to the Thread:** Other users can respond to the thread by adding their comments, questions, or contributions. These responses are usually displayed in chronological order below the original post.;\
 :heavy_check_mark: **Nested Replies:** Users can reply to specific responses within the thread, creating nested or threaded conversations. These nested replies allow for more focused discussions on specific aspects of the topic.;\
-:heavy_check_mark: **Profile page:** Users have a dedicated profile page where they can view their personal information including profile picture, username, bio and threads sorted by new.
+:heavy_check_mark: **Profile page:** Users have a dedicated profile page where they can view their personal information including profile picture, username, bio and threads sorted by new.;\
 :heavy_check_mark: **Communities:** Users can create communities that will have their own pages with their own posts that can be accessed by everyone, but only those who are part of the community can create threads.
 
 ## :rocket: Technologies ##
