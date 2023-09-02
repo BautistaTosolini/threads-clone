@@ -47,14 +47,14 @@ export async function fetchThreads({ pageNumber = 1, pageSize = 20 }) {
   return { threads, isNext };
 }
 
-interface Params {
+interface CreateThreadParams {
   text: string,
   author: string,
   communityId: string | null,
   path: string,
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createThread({ text, author, communityId, path }: CreateThreadParams
 ) {
   try {
     connectToDB();
@@ -224,12 +224,14 @@ export async function fetchUserThreads(id: string) {
   }
 };
 
-export async function addCommentToThread(
-  threadId: string,
-  commentText: string,
-  userId: string,
-  path: string
-) {
+interface AddCommentToThreadParams {
+  threadId: string;
+  commentText: string;
+  userId: string;
+  path: string;
+};
+
+export async function addCommentToThread({ threadId, commentText, userId, path }: AddCommentToThreadParams) {
   connectToDB();
 
   try {
