@@ -27,15 +27,17 @@ interface ThreadCardProps {
     }
   }[]
   isComment?: boolean;
-  isNotHome?: boolean;
+  isHome?: boolean;
 };
 
-const ThreadCard = ({ id, currentUserId, parentId, content, author, community, createdAt, comments, isComment, isNotHome = false }: ThreadCardProps) => {
+const ThreadCard = ({ id, currentUserId, parentId, content, author, community, createdAt, comments, isComment, isHome }: ThreadCardProps) => {
   
   // creates an array of 2 Image elements with the condition of both being written by different authors o it doesn't repeat the authors image
   // only is shown in home page, not individual one
+  console.log('isHome var', isHome)
   let uniqueAuthors: JSX.Element[] | null = null;
-  if (!isNotHome) {
+  if (isHome) {
+    console.log('isHome')
     uniqueAuthors = comments
     .slice(0, comments.length >= 2 ? 2 : comments.length)
     .reduce((result: JSX.Element[], comment, index, arr) => {
@@ -139,7 +141,7 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
       </div>
 
       {/* Replies for main thread with the icon of authors of 2 first replies */}
-      {!isComment && comments.length > 0 && isNotHome && (
+      {!isComment && comments.length > 0 && isHome && (
         <Link href={`/thread/${id}`}>
           <div className='ml-1 mt-3 flex items-center gap-2'>
             {uniqueAuthors}    
