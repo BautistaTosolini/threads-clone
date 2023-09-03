@@ -43,6 +43,7 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: ThreadsTabP
             community={thread.community}
             createdAt={thread.createdAt}
             comments={thread.children}
+            isNotHome
           />
         )
       })}

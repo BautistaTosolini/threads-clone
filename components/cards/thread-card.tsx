@@ -1,7 +1,8 @@
-import { formatDateString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+
+import { formatDateString } from '@/lib/utils';
+import DeleteThread from '@/components/shared/delete-thread';
 
 interface ThreadCardProps {
   id: string;
@@ -22,13 +23,38 @@ interface ThreadCardProps {
   comments: {
     author: {
       image: string;
+      _id: string;
     }
   }[]
   isComment?: boolean;
-
+  isNotHome?: boolean;
 };
 
-const ThreadCard = ({ id, currentUserId, parentId, content, author, community, createdAt, comments, isComment }: ThreadCardProps) => {
+const ThreadCard = ({ id, currentUserId, parentId, content, author, community, createdAt, comments, isComment, isNotHome = false }: ThreadCardProps) => {
+  
+  // creates an array of 2 Image elements with the condition of both being written by different authors o it doesn't repeat the authors image
+  // only is shown in home page, not individual one
+  let uniqueAuthors: JSX.Element[] | null = null;
+  if (!isNotHome) {
+    uniqueAuthors = comments
+    .slice(0, comments.length >= 2 ? 2 : comments.length)
+    .reduce((result: JSX.Element[], comment, index, arr) => {
+      if (index === 0 || comment.author._id !== arr[index - 1].author._id) {
+        result.push(
+          <Image
+            key={index}
+            src={comment.author.image}
+            alt='User'
+            width={24}
+            height={24}
+            className={`${index !== 0 && '-ml-5'} rounded-full object-cover`}
+          />
+        )
+      }
+      return result;
+    }, []);
+  }
+
   return (
     <article className={`flex w-full flex-col rounded-sm ${isComment ? 'px-0 xs:px-7' : 'bg-dark-2 p-7'}`}>
       <div className='flex items-start justify-between'>
@@ -94,7 +120,7 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
               {isComment && comments.length > 0 && (
                 <Link href={`/thread/${id}`}>
                   <p className='mt-1 text-subtle-medium text-gray-1'>
-                    {comments.length} replies
+                    {comments.length} repl{comments.length > 1 ? 'ies' : 'y'}
                   </p>
                 </Link>
               )}
@@ -102,25 +128,46 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
           </div>
         </div>
 
-      </div>
-        {!isComment && community && (
-          <Link
-            href={`/communities/${community.id}`}
-            className='mt-5 flex items-center'
-          >
-            <p className='text-subtle-medium text-gray-1'>
-              {formatDateString(createdAt)} - {community.name} Community
-            </p>
+        <DeleteThread
+          threadId={JSON.stringify(id)}
+          currentUserId={currentUserId}
+          authorId={author.id}
+          parentId={parentId}
+          isComment={isComment}
+        />
 
-            <Image 
-              src={community.image}
-              alt={community.name}
-              width={15}
-              height={14}
-              className='ml-1 rounded-full object-contain'
-            />
-          </Link>
-        )}
+      </div>
+
+      {/* Replies for main thread with the icon of authors of 2 first replies */}
+      {!isComment && comments.length > 0 && isNotHome && (
+        <Link href={`/thread/${id}`}>
+          <div className='ml-1 mt-3 flex items-center gap-2'>
+            {uniqueAuthors}    
+            <p className='mt-1 text-subtle-medium text-gray-1'>
+              {comments.length} repl{comments.length > 1 ? 'ies' : 'y'}
+            </p>
+          </div>
+        </Link>
+      )}
+
+      {!isComment && community && (
+        <Link
+          href={`/communities/${community.id}`}
+          className='mt-5 flex items-center'
+        >
+          <p className='text-subtle-medium text-gray-1'>
+            {formatDateString(createdAt)} - {community.name} Community
+          </p>
+
+          <Image 
+            src={community.image}
+            alt={community.name}
+            width={15}
+            height={14}
+            className='ml-1 rounded-full object-contain'
+          />
+        </Link>
+      )}
     </article>
   )
 };

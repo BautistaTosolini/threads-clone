@@ -11,20 +11,18 @@ const SearchBar = ({ route }: { route: string }) => {
   const [searchString, setSearchString] = useState('');
   const router = useRouter();
   const debouncedValue = useDebounce<string>(searchString, 500);
-  console.log('DebouncedValue')
 
   useEffect(() => {
     router.push(`/${route}?query=${debouncedValue}`)
-    console.log('Use Effect')
   }, [debouncedValue])
 
   return (
     <div className='flex gap-4 bg-dark-3 rounded-md'>
       <Image 
-        src='/assets/search.svg'
+        src='/assets/search-gray.svg'
         alt='Search'
-        width={24}
-        height={24}
+        width={20}
+        height={20}
         className='ml-4'
       />
       <Input 
