@@ -16,6 +16,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   }
 
   const communityDetails = await fetchCommunityDetails(params.id);
+  console.log(communityDetails)
 
   return (
     <section>

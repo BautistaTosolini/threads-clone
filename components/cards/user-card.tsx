@@ -31,6 +31,9 @@ const UserCard = ({ id, name, username, imgUrl, userType }: UserCardProps) => {
           <h4 className='text-base-semibold text-light-1'>
             {name}
           </h4>
+          <p className='text-base-medium text-gray-1'>
+            @{username}
+          </p>
           <p className='text-small-medium text-gray-1'>
             @{username}
           </p>

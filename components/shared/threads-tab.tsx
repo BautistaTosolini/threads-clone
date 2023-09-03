@@ -25,6 +25,8 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: ThreadsTabP
 
   result.threads.sort((a: any, b: any) => b.createdAt - a.createdAt);
 
+  console.log(result)
+
   return (
     <section className='mt-9 flex flex-col gap-10'>
       {result.threads.map((thread: any) => {
@@ -37,8 +39,8 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: ThreadsTabP
             content={thread.text}
             author={
               accountType === 'User' 
-              ? { name: result.name, image: result.image, id: result.id } 
-              : { name: thread.author.name, image: thread.author.image, id: thread.author.id }
+              ? { name: result.name, image: result.image, id: result.id, username: result.username } 
+              : { name: thread.author.name, image: thread.author.image, id: thread.author.id, username: thread.author.username }
             }
             community={thread.community}
             createdAt={thread.createdAt}

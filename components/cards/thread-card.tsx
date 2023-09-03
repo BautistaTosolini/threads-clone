@@ -11,6 +11,7 @@ interface ThreadCardProps {
   content: string;
   author: {
     name: string;
+    username: string;
     image: string;
     id: string;
   };
@@ -34,10 +35,8 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
   
   // creates an array of 2 Image elements with the condition of both being written by different authors o it doesn't repeat the authors image
   // only is shown in home page, not individual one
-  console.log('isHome var', isHome)
   let uniqueAuthors: JSX.Element[] | null = null;
   if (isHome) {
-    console.log('isHome')
     uniqueAuthors = comments
     .slice(0, comments.length >= 2 ? 2 : comments.length)
     .reduce((result: JSX.Element[], comment, index, arr) => {
@@ -76,9 +75,20 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
 
           <div className='flex w-full flex-col'>
             <Link href={`/profile/${author.id}`} className='w-fit'>
-              <h4 className='cursor-pointer text-base-semibold text-light-1'>
-                {author.name}
-              </h4>
+              <div className='flex gap-2 items-center'>
+                <h4 className='cursor-pointer text-base-semibold text-light-1'>
+                  {author.name}
+                </h4>
+                <p className='text-small-regular text-gray-1'>
+                  @{author.username}
+                </p>
+                <span className='text-small-regular text-gray-1'>
+                  -
+                </span>
+                <p className='text-small-regular text-gray-1'>
+                  {formatDateString(createdAt)}
+                </p>
+              </div>
             </Link>
 
             <p className='mt-2 text-small-regular text-light-2'>
@@ -152,13 +162,13 @@ const ThreadCard = ({ id, currentUserId, parentId, content, author, community, c
         </Link>
       )}
 
-      {!isComment && community && (
+      {!isComment && community && isHome && (
         <Link
           href={`/communities/${community.id}`}
           className='mt-5 flex items-center'
         >
           <p className='text-subtle-medium text-gray-1'>
-            {formatDateString(createdAt)} - {community.name} Community
+            Created at {community.name} Community
           </p>
 
           <Image 
